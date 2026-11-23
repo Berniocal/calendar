@@ -81,11 +81,58 @@ function nameOfDay(d,s){const names=[];if(s.czNames){const cs=window.CALENDAR_CZ
 function dayItems(d,s){const items=nameOfDay(d,s);const events=buildYear(d.getUTCFullYear()).get(dayKey(d))||[];
  const active={'cz-holiday':s.czHolidays,'us-holiday':s.usHolidays,'cz-important':s.czImportant,'us-important':s.usImportant};
  for(const event of events)if(active[event.kind]){const label=isEn(s)?event.en:event.cs;items.push({kind:event.kind,text:label,title:label})}return items}
-function extraHTML(d,s,esc,weekly=false){const items=dayItems(d,s);return items.length?`<span class="day-extras${weekly?' week-extras':''}">${items.map(item=>`<span class="day-extra ${item.kind}" title="${esc(item.title)}">${esc(item.text)}</span>`).join('')}</span>`:''}
+function compactEventLabel(item,s){
+ if(!/(holiday|important)$/.test(item.kind))return item.text;
+ const cs={
+  'Nový rok / Den obnovy samostatného českého státu':'Nový rok / Den ČR',
+  'Den vzniku samostatného československého státu':'Vznik Československa',
+  'Den boje za svobodu a demokracii':'Svoboda a demokracie',
+  'Den upálení mistra Jana Husa':'Den mistra Jana Husa',
+  'Den památky obětí komunistického režimu':'Oběti komunismu',
+  'Kolumbův den / Den původních obyvatel':'Kolumbův den',
+  'Nový rok (náhradní den)':'Nový rok (náhr.)',
+  'Den nezávislosti (náhradní den)':'Nezávislost (náhr.)',
+  'Vánoce (náhradní den)':'Vánoce (náhr.)',
+  'Den veteránů (náhradní den)':'Den veteránů (náhr.)',
+  'Juneteenth (náhradní den)':'Juneteenth (náhr.)'
+ };
+ const en={
+  'Juneteenth National Independence Day':'Juneteenth',
+  'Washington’s Birthday (Presidents’ Day)':'Presidents’ Day',
+  'Martin Luther King Jr. Day':'MLK Day',
+  'Columbus Day / Indigenous Peoples’ Day':'Columbus / Indigenous Day',
+  'New Year’s Day (observed)':'New Year’s (obs.)',
+  'Independence Day (observed)':'Independence Day (obs.)',
+  'Christmas Day (observed)':'Christmas (obs.)',
+  'Veterans Day (observed)':'Veterans (obs.)',
+  'Juneteenth (observed)':'Juneteenth (obs.)',
+  'Struggle for Freedom and Democracy Day':'Freedom & Democracy',
+  'Czechoslovak Independence Day':'Czechoslovak Independence',
+  'New Year / Czech Restoration Day':'New Year / Czech State'
+ };
+ return (isEn(s)?en:cs)[item.text]||item.text;
+}
+function monthEventBudget(s,hasNote){
+ let count=['A3','S30','W30'].includes(s.format)?4:s.format==='A5'?2:3;
+ if(['split','poster'].includes(s.style))count=Math.min(count,3);
+ if(s.orientation==='landscape')count=Math.max(2,count-1);
+ if(Number(s.fontSize)>=130||hasNote)count=Math.max(2,count-1);
+ return count;
+}
+function extraHTML(d,s,esc,weekly=false,hasNote=false){
+ const items=dayItems(d,s);if(!items.length)return '';
+ const order={'cz-holiday':0,'us-holiday':0,'name-cz':1,'name-us':1,'cz-important':2,'us-important':2};
+ const sorted=weekly?items:[...items].sort((a,b)=>(order[a.kind]??3)-(order[b.kind]??3));
+ const budget=weekly?Infinity:monthEventBudget(s,hasNote);
+ const selected=sorted.length>budget?sorted.slice(0,budget-1):sorted;
+ const more=sorted.length-selected.length;
+ const title=sorted.map(x=>x.title).join(' • ');
+ return `<span class="day-extras${weekly?' week-extras':''}" title="${esc(title)}">${selected.map(item=>`<span class="day-extra ${item.kind}" title="${esc(item.title)}">${esc(weekly?item.text:compactEventLabel(item,s))}</span>`).join('')}${more?`<span class="day-extra more-events" title="${esc(sorted.slice(selected.length).map(x=>x.title).join(' • '))}">+${more} ${isEn(s)?'more':'další'}</span>`:''}</span>`;
+}
 function hasPublicHoliday(d,s){return dayItems(d,s).some(x=>x.kind==='cz-holiday'||x.kind==='us-holiday')}
 function monthMarkup(s,month,esc,isoDate){const year=s.year,start=isEn(s)?utc(year,month,1).getUTCDay():(utc(year,month,1).getUTCDay()+6)%7;const short=isEn(s)?EN_SHORT:CS_SHORT;
 const head=short.map((n,i)=>`<div class="day-label${(isEn(s)?[0,6].includes(i):i>4)?' weekend':''}">${n}</div>`).join('');
-const cells=Array.from({length:42},(_,i)=>{const d=utc(year,month,1-start+i),within=d.getUTCMonth()===month,wd=d.getUTCDay(),weekend=wd===0||wd===6,note=s.notes[isoDate(d)]||'',data=isoDate(d),show=within||s.showOther;return `<div class="datecell ${within?'':'outside'} ${weekend?(wd===0?'sunday':'saturday'):''}${show&&hasPublicHoliday(d,s)?' has-holiday':''}" data-date="${data}">${show?`<span class="date-number">${d.getUTCDate()}</span>${extraHTML(d,s,esc)}`:''}${show&&note?`<span class="note">${esc(note)}</span>`:''}</div>`}).join('');return `<div class="month-grid">${head}${cells}</div>`}
+const cells=Array.from({length:42},(_,i)=>{const d=utc(year,month,1-start+i),within=d.getUTCMonth()===month,wd=d.getUTCDay(),weekend=wd===0||wd===6,note=s.notes[isoDate(d)]||'',data=isoDate(d),show=within||s.showOther;return `<div class="datecell ${within?'':'outside'} ${weekend?(wd===0?'sunday':'saturday'):''}${show&&hasPublicHoliday(d,s)?' has-holiday':''}" data-date="${data}">${show?`<span class="date-number">${d.getUTCDate()}</span>${extraHTML(d,s,esc,false,Boolean(note))}`:''}${show&&note?`<span class="note">${esc(note)}</span>`:''}</div>`}).join('');return `<div class="month-grid">${head}${cells}</div>`}
 function usStart(y){const jan1=utc(y,0,1);return plusDays(jan1,-jan1.getUTCDay())}
 function usWeeksInYear(y){return Math.floor((utc(y,11,31).getTime()-usStart(y).getTime())/86400000/7)+1}
 function weekStart(s,idx,isoWeekStart){return isEn(s)?plusDays(usStart(s.year),idx*7):isoWeekStart(s.year,idx+1)}
@@ -115,6 +162,6 @@ function localizeUI(s){const isUS=isEn(s);document.documentElement.lang=isUS?'en
  const note=document.querySelector('#noteBackdrop p');if(note)note.textContent=isUS?'The note appears on this date and in the PDF export.':'Text se zobrazí v daném dni i v exportovaném PDF.';
  const txt=document.querySelector('#noteArea');if(txt)txt.placeholder=isUS?'Enter your note…':'Napište poznámku…';
 }
-function styleVars(s){const fonts={sans:"'DM Sans',Arial,sans-serif",serif:"Georgia,'Times New Roman',serif",display:"'Playfair Display',Georgia,serif",mono:"'Courier New',monospace"};const stroke={none:'0px',fine:'.055cqi',normal:'.11cqi',thick:'.22cqi'};return `--calendar-font:${fonts[s.fontFamily]||fonts.sans};--cal-scale:${(s.fontSize||100)/100};--grid-stroke:${stroke[s.gridLines]||stroke.normal};`}
+function styleVars(s){const fonts={sans:"'DM Sans',Arial,sans-serif",serif:"Georgia,'Times New Roman',serif",display:"'Playfair Display',Georgia,serif",mono:"'Courier New',monospace"};const stroke={none:'0px',fine:'.055cqi',normal:'.11cqi',thick:'.22cqi'};const widths={A3:297,A4:210,A5:148,S30:300,S21:210,W30:300,W21:210,P20:200};const heights={A3:420,A4:297,A5:210,S30:300,S21:210,W30:420,W21:300,P20:500};const w=s.orientation==='landscape'?Math.max(widths[s.format]||210,heights[s.format]||297):Math.min(widths[s.format]||210,heights[s.format]||297);const density=Math.max(.65,Math.min(1,210/w));return `--calendar-font:${fonts[s.fontFamily]||fonts.sans};--cal-scale:${(s.fontSize||100)/100};--grid-stroke:${stroke[s.gridLines]||stroke.normal};--event-density:${density.toFixed(3)};`}
 window.CalendarFeatures={monthMarkup,weekMarkup,weekStart,usWeeksInYear,pageTitle,pageLabel,monthTag,localizeUI,styleVars,dayItems,easterSunday,US_NAME_POOL};
 })();
