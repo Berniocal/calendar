@@ -69,3 +69,23 @@
 #noteEvents[hidden]{display:none!important}
 #noteEvents ul{margin:5px 0 0;padding-left:18px}
 #noteEvents li+li{margin-top:3px}
+
+/* Use only the number of week rows actually needed by the month (4, 5 or 6). */
+.sheet .month-grid{grid-template-rows:.52fr repeat(var(--calendar-weeks,6),minmax(0,1fr))}
+.sheet .datecell .more-events-counter{position:absolute;top:.45cqi;right:.45cqi;display:block;
+  border-radius:1cqi;padding:.05cqi .35cqi;line-height:1.3;font-size:calc(.98cqi * var(--event-density,1));
+  font-weight:800;color:var(--paper-accent);background:color-mix(in srgb,var(--paper-bg) 88%,var(--paper-accent) 12%);
+  pointer-events:none}
+/* Photo-first page designs make space for a readable calendar. */
+.sheet.kind-monthly.style-editorial .photos{flex-basis:54%}
+.sheet.kind-monthly.style-poster .calendar-panel{height:58%}
+.sheet.kind-monthly.orientation-landscape.style-classic .photos,
+.sheet.kind-monthly.orientation-landscape.style-minimal .photos,
+.sheet.kind-monthly.orientation-landscape.style-collage .photos,
+.sheet.kind-monthly.orientation-landscape.style-editorial .photos{flex-basis:26%}
+.sheet.kind-monthly.orientation-landscape.style-poster .calendar-panel{height:76%;bottom:2cqi}
+.sheet.kind-monthly.orientation-landscape .calendar-panel{padding-top:1.3cqi;padding-bottom:1.3cqi}
+.sheet.kind-monthly.orientation-landscape .cal-heading{padding-bottom:.85cqi}
+.sheet.kind-monthly.orientation-landscape .cal-heading .month{font-size:4.6cqi}
+.sheet.style-split .datecell .day-extra{font-size:calc(.81cqi * var(--cal-scale,1) * var(--event-density,1))}
+.sheet.style-split .datecell .date-number{font-size:.88em}
