@@ -1,0 +1,53 @@
+/* Grid design is independent from photo/page layout. */
+.sheet .calendar-panel {font-family:var(--calendar-font,'DM Sans',Arial,sans-serif)}
+.sheet .cal-heading .month{font-family:var(--calendar-font,'DM Sans',Arial,sans-serif);font-size:calc(6cqi * var(--cal-scale,1))}
+.sheet .cal-heading .subtitle{font-size:calc(1.5cqi * var(--cal-scale,1))}
+.sheet .day-label{font-size:calc(1.65cqi * var(--cal-scale,1))}
+.sheet .datecell{font-size:calc(1.7cqi * var(--cal-scale,1));display:flex;flex-direction:column;gap:.10cqi}
+.sheet .week-day .week-name{font-size:calc(1.7cqi * var(--cal-scale,1))}
+.sheet .week-day .week-no{font-size:calc(3.2cqi * var(--cal-scale,1))}
+.sheet .week-grid,.sheet .month-grid{border-top-width:var(--grid-stroke,.11cqi)}
+.sheet .month-grid{border-left-width:var(--grid-stroke,.11cqi)}
+.sheet .datecell,.sheet .day-label{border-right-width:var(--grid-stroke,.11cqi);border-bottom-width:var(--grid-stroke,.11cqi)}
+.sheet .week-day{border-bottom-width:var(--grid-stroke,.11cqi)}
+.sheet .day-extras{display:flex;flex-direction:column;gap:.13cqi;min-height:0;overflow:hidden;width:100%;font-weight:500}
+.sheet .day-extra{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;font-size:calc(1.1cqi * var(--cal-scale,1));line-height:1.22;color:var(--paper-ink);font-weight:500}
+.sheet .day-extra.name-cz,.sheet .day-extra.name-us{color:#6f7b87}
+.sheet .day-extra.cz-holiday,.sheet .day-extra.us-holiday{color:#b54d47;font-weight:800}
+.sheet .day-extra.cz-important,.sheet .day-extra.us-important{color:var(--paper-accent);font-weight:650}
+.sheet .datecell.has-holiday .date-number,.sheet .week-day.has-holiday .week-no{color:#b54d47}
+.sheet .datecell .note{margin-top:.18cqi;font-size:calc(1.12cqi * var(--cal-scale,1));max-height:39%;color:var(--paper-ink);font-style:italic}
+.sheet .week-details{display:flex;flex-direction:column;gap:.25cqi;flex:1;overflow:hidden;min-width:0}
+.sheet .week-details .day-extras{display:flex;flex-flow:row wrap;gap:.3cqi .6cqi;overflow:visible;flex-shrink:0}
+.sheet .week-details .day-extra{font-size:calc(1.35cqi * var(--cal-scale,1));max-width:100%}
+.sheet .week-details .week-note{display:block;flex:1;font-size:calc(1.5cqi * var(--cal-scale,1));white-space:pre-wrap;overflow:hidden;color:#556678;overflow-wrap:anywhere}
+.sheet.design-classic .month-grid{background:transparent}
+.sheet.design-classic .cal-heading .month{font-weight:800;text-transform:uppercase}
+.sheet.design-clean .month-grid,.sheet.design-clean .week-grid{border-left:0;border-top-width:var(--grid-stroke)}
+.sheet.design-clean .datecell,.sheet.design-clean .day-label{border-right:0}
+.sheet.design-clean .cal-heading .month{font-weight:400;text-transform:none;letter-spacing:-.12cqi}
+.sheet.design-clean .datecell .date-number{font-weight:500}
+.sheet.design-clean .day-label{color:#7b8997}
+.sheet.design-modern .day-label{background:var(--paper-accent);color:#fff;font-weight:700}
+.sheet.design-modern .day-label.weekend{color:#fff}
+.sheet.design-modern .cal-heading .month{font-weight:800;text-transform:uppercase;letter-spacing:-.24cqi}
+.sheet.design-modern .datecell.has-holiday{background:color-mix(in srgb,var(--paper-accent) 7%,transparent)}
+.sheet.design-modern .week-day.has-holiday{background:color-mix(in srgb,var(--paper-accent) 6%,transparent)}
+.sheet.design-elegant .cal-heading .month{font-size:calc(6.4cqi * var(--cal-scale,1));font-weight:500;text-transform:none;letter-spacing:-.1cqi}
+.sheet.design-elegant .day-label{font-weight:500;letter-spacing:.08cqi}
+.sheet.design-elegant .datecell .date-number{font-weight:500}
+.sheet.design-elegant .cal-heading{border-bottom:.08cqi solid var(--paper-accent);margin-bottom:.7cqi}
+.sheet.design-bold .day-label{background:var(--paper-ink);color:#fff;font-weight:800}
+.sheet.design-bold .day-label.weekend{color:#fff}
+.sheet.design-bold .datecell .date-number{font-size:1.2em;font-weight:800}
+.sheet.design-bold .cal-heading .month{font-size:calc(7cqi * var(--cal-scale,1));font-weight:800;text-transform:uppercase}
+.sheet.design-bold .week-day .week-no{font-weight:900}
+.calendar-style-sample{display:flex;flex-direction:column;justify-content:space-between;height:68px;padding:8px 9px;border-radius:6px;background:#f6f7f9;color:#334a5d;line-height:1.1;text-align:left}
+.calendar-style-sample b{font-size:17px}.calendar-style-sample small{letter-spacing:.09em;font-size:11px;word-spacing:4px}
+[data-calendar-style="clean"] .calendar-style-sample{background:white;font-weight:400;border-bottom:1px solid #d3d9dd}
+[data-calendar-style="clean"] .calendar-style-sample b{font-weight:400}
+[data-calendar-style="modern"] .calendar-style-sample{background:#e4eff5;border-bottom:8px solid #5889a5}
+[data-calendar-style="elegant"] .calendar-style-sample{background:#f9f6ee;font-family:Georgia,serif;color:#806d58}
+[data-calendar-style="bold"] .calendar-style-sample{background:#2e5068;color:white}
+#fontSizeInput{width:100%}
+.calendar-help{font-size:11px;line-height:1.5;color:#7b8997;margin-top:8px}
