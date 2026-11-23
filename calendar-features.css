@@ -51,3 +51,21 @@
 [data-calendar-style="bold"] .calendar-style-sample{background:#2e5068;color:white}
 #fontSizeInput{width:100%}
 .calendar-help{font-size:11px;line-height:1.5;color:#7b8997;margin-top:8px}
+/* Legible name-days and holidays on every print format. A3 has more actual physical
+   space, so date labels keep approximately A4-size type instead of scaling up. */
+.sheet .datecell .date-number{flex-shrink:0}
+.sheet .datecell .day-extras{flex:0 1 auto;min-height:0;gap:.18cqi;overflow:hidden}
+.sheet .datecell .day-extra{
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;
+  white-space:normal;overflow:hidden;text-overflow:clip;
+  hyphens:auto;overflow-wrap:anywhere;word-break:normal;
+  font-size:calc(1.16cqi * var(--cal-scale,1) * var(--event-density,1));
+  line-height:1.18;max-width:100%;flex-shrink:0;
+}
+.sheet .datecell .day-extra.more-events{display:block;white-space:nowrap;color:var(--paper-accent);font-weight:800}
+.sheet .week-details .day-extra{display:block;white-space:normal;overflow-wrap:anywhere;-webkit-line-clamp:unset;font-size:calc(1.35cqi * var(--cal-scale,1) * var(--event-density,1))}
+.sheet .week-details .day-extras{overflow:hidden;max-height:100%}
+#noteEvents{margin:0 0 14px;padding:11px 13px;background:#f1f5f7;border-radius:9px;font-size:12px;line-height:1.5;color:#415467}
+#noteEvents[hidden]{display:none!important}
+#noteEvents ul{margin:5px 0 0;padding-left:18px}
+#noteEvents li+li{margin-top:3px}
