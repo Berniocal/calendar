@@ -89,3 +89,20 @@
 .sheet.kind-monthly.orientation-landscape .cal-heading .month{font-size:4.6cqi}
 .sheet.style-split .datecell .day-extra{font-size:calc(.81cqi * var(--cal-scale,1) * var(--event-density,1))}
 .sheet.style-split .datecell .date-number{font-size:.88em}
+
+/* Independent text-size controls for each type of calendar entry.
+   These apply to screen preview and the full-size print/PDF layout alike. */
+.event-size-controls{margin:13px 0;padding:13px 12px 8px;background:#f4f7fa;border:1px solid #e4eaf1;border-radius:12px}
+.event-size-controls h4{font-size:11px;font-weight:800;letter-spacing:.6px;color:#465b70;margin:0 0 13px}
+.event-size-control{margin:0 0 11px}
+.event-size-control>span{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px}
+.event-size-control b{font-weight:800;font-size:11px;color:#1d4967;min-width:40px;text-align:right}
+.event-size-control input[type=range]{width:100%;min-height:23px;cursor:pointer;accent-color:#426782}
+.sheet .day-extra.name-cz,.sheet .day-extra.name-us{--entry-scale:var(--names-scale,1)}
+.sheet .day-extra.cz-holiday,.sheet .day-extra.us-holiday{--entry-scale:var(--holidays-scale,1)}
+.sheet .day-extra.cz-important,.sheet .day-extra.us-important{--entry-scale:var(--important-scale,1)}
+.sheet .datecell .day-extra{font-size:calc(1.16cqi * var(--event-density,1) * var(--entry-scale,1))}
+.sheet .week-details .day-extra{font-size:calc(1.35cqi * var(--event-density,1) * var(--entry-scale,1))}
+.sheet.style-split .datecell .day-extra{font-size:calc(.81cqi * var(--event-density,1) * var(--entry-scale,1))}
+.sheet .datecell .note{font-size:calc(1.12cqi * var(--notes-scale,1))}
+.sheet .week-details .week-note{font-size:calc(1.5cqi * var(--notes-scale,1))}
